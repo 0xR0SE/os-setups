@@ -2,16 +2,12 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-alias cpudef="doas sh -c 'echo 1 > /sys/devices/system/cpu/cpufreq/boost' && doas cpupowerfrequency-set -g powersave"
+alias cpudef="doas sh -c 'echo 1 > /sys/devices/system/cpu/cpufreq/boost' && doas cpupower frequency-set -g powersave"
 alias cpump="doas sh -c 'echo 1 > /sys/devices/system/cpu/cpufreq/boost' && doas cpupower frequency-set -g performance"
 alias cpulp="doas sh -c 'echo 0 > /sys/devices/system/cpu/cpufreq/boost' && doas cpupower frequency-set -g powersave"
 alias torssh='torsocks ssh'
 alias tornc='torsocks nc'
-
-complete -F _command doas
-
-. "$HOME/.cargo/env"
-export PATH=$PATH:/usr/sbin
+alias sudo='doas'
 
 # If not running interactively, don't do anything
 case $- in
@@ -70,9 +66,11 @@ fi
 if [ "$color_prompt" = yes ]; then
     #PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 PS1='\h \$ '
+#PS1='\$ '
 else
     #PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-     PS1='\h \$ '
+     #PS1='\h \$ '
+	PS1='\$ '
 fi
 unset color_prompt force_color_prompt
 
@@ -80,7 +78,7 @@ unset color_prompt force_color_prompt
 case "$TERM" in
 xterm*|rxvt*)
     #PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    PS1="\[\e]0;$\h \w\a\]$PS1" 
+    PS1="\[\e]0;$\h \w\a\]$PS1"
    ;;
 *)
     ;;
@@ -125,3 +123,8 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+complete -F _command doas
+
+. "$HOME/.cargo/env"
+export PATH=$PATH:/usr/sbin
